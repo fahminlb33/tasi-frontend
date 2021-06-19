@@ -87,7 +87,8 @@ export default {
       return (link) => {
         if (link && link.name) {
           return (
-            link.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+            link.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0 &&
+            link.canManufacture === false
           )
         } else {
           return true

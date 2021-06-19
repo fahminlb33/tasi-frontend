@@ -54,46 +54,68 @@
         </el-card>
       </el-col>
       <el-col :span="6">
-        <el-card
-          class="order__card"
-          style="height: calc(100vh - 210px); padding-left: 0.5em"
-          ><el-container style="height: 100%">
-            <el-header><h1 style="margin-left: 0.5em">Order</h1></el-header>
-            <el-main>
-              <el-form label-position="left">
-                <el-form-item label="Produce Qty">
-                  <el-input-number
-                    v-model="ruleForm.expectedProduce"
-                    size="normal"
-                    label="Product"
-                    :min="1"
-                    :max="100"
-                    :step="1"
-                    :controls="true"
-                    controls-position="right"
-                  >
-                  </el-input-number>
-                </el-form-item>
-                <el-form-item label="Completion (ETA)">
-                  <el-date-picker
-                    v-model="ruleForm.expectedCompletion"
-                    type="date"
-                    placeholder="Pilih tanggal"
-                  >
-                  </el-date-picker>
-                </el-form-item>
+        <transition name="el-fade-in">
+          <el-card
+            class="order__card"
+            style="height: calc(100vh - 210px); padding-left: 0.5em"
+            ><el-container style="height: 100%">
+              <el-header><h1 style="margin-left: 0.5em">Pesanan</h1></el-header>
+              <el-main>
+                <el-form label-position="left" label-width="130px">
+                  <el-form-item label="Product">
+                    <el-select
+                      v-model="ruleForm.productId"
+                      clearable
+                      placeholder="Pilih produk"
+                      style="width: 90%"
+                    >
+                      <el-option
+                        v-for="item in products"
+                        :key="item.productId"
+                        :label="item.name"
+                        :value="item.productId"
+                      >
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
 
-                <el-button
-                  type="success"
-                  icon="el-icon-shopping-cart-full"
-                  @click="onOrderClick"
-                  >Produksi</el-button
-                >
-              </el-form>
-            </el-main>
-            <el-footer></el-footer>
-          </el-container> </el-card
-      ></el-col>
+                  <el-form-item label="Quantity">
+                    <el-input-number
+                      v-model="ruleForm.expectedProduce"
+                      size="normal"
+                      label="Product"
+                      :min="1"
+                      :max="100"
+                      :step="1"
+                      :controls="true"
+                      controls-position="right"
+                      style="width: 90%"
+                    >
+                    </el-input-number>
+                  </el-form-item>
+                  <el-form-item label="Completion (ETA)">
+                    <el-date-picker
+                      v-model="ruleForm.expectedCompletion"
+                      type="date"
+                      placeholder="Pilih tanggal"
+                      style="width: 90%"
+                    >
+                    </el-date-picker>
+                  </el-form-item>
+
+                  <el-button
+                    type="success"
+                    icon="el-icon-shopping-cart-full"
+                    @click="onOrderClick"
+                    >Produksi</el-button
+                  >
+                </el-form>
+              </el-main>
+              <el-footer></el-footer>
+            </el-container>
+          </el-card>
+        </transition>
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -108,8 +130,9 @@ export default {
   },
   data() {
     return {
+      products: [],
       tableData: [],
-      ruleForm: { user: '', supplier: '' },
+      ruleForm: { expectedProduce: '1', expectedCompletion: '', productId: 0 },
     }
   },
   computed: {
@@ -131,6 +154,7 @@ export default {
   mounted() {
     this.FetchUsers()
     this.FetchSuppliers()
+    this.FetchProducts()
   },
   methods: {
     ...mapActions('products', {
@@ -151,9 +175,9 @@ export default {
         products.push({ productId: element.productId, quantity: element.qty })
       }
       await this.$axios.$post(url, {
-        productId: this.ruleForm.ManufacturedProduct,
+        productId: this.ruleForm.productId,
         expectedProduce: this.ruleForm.expectedProduce,
-        expectedCompletion: this.ruleForm.completion,
+        expectedCompletion: this.ruleForm.expectedCompletion,
         materials: products,
       })
       this.$message({
@@ -174,6 +198,14 @@ export default {
         `https://tasi-backend.azurewebsites.net/api/suppliers`
       )
       this.suppliers = suppliers.data.data
+    },
+    async FetchProducts() {
+      const products = await this.$axios.$get(
+        `https://tasi-backend.azurewebsites.net/api/products`
+      )
+      this.products = products.data.data.filter(
+        (x) => x.canManufacture === true
+      )
     },
     ResetForm() {
       this.tableData = []

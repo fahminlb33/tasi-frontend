@@ -4,7 +4,9 @@
       <data-tables
         :data="orders"
         :filters="filters"
+        :total="orders.length"
         :loading="isLoading"
+        :page-size="20"
         layout="tool, table, pagination"
       >
         <template #tool>
@@ -119,7 +121,6 @@ export default {
   components: { Toolbar },
   data() {
     return {
-      selectedIndex: 0,
       addDrawerShow: false,
       drawerShow: false,
       editDrawerShow: false,
@@ -139,6 +140,7 @@ export default {
 
   async created() {
     await this.$store.dispatch('orders/fetchList')
+    await this.loadData()
   },
   methods: {
     ...mapActions('orders', {
@@ -219,6 +221,14 @@ export default {
     handleDetails(index, row) {
       this.selectedIndex = index
       this.$router.push(`/ops/orders/${row.orderId}`)
+    },
+    async loadData(queryInfo) {
+      const data = await this.$axios.$get(
+        `https://tasi-backend.azurewebsites.net/api/orders`
+      )
+      this.data = data.data.data
+      this.total = data.data.totalPages
+      return data
     },
     async handleStepForward(index, row) {
       try {
