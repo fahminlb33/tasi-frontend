@@ -38,7 +38,7 @@
                       v-model="scope.row.qty"
                       :min="1"
                       value="1"
-                      :max="scope.row.stock"
+                      :max="OrderMode ? 100000 : scope.row.stock"
                       size="mini"
                     ></el-input-number>
                   </template>
@@ -58,11 +58,11 @@
           class="order__card"
           style="height: calc(100vh - 210px); padding-left: 0.5em"
           ><el-container style="height: 100%">
-            <el-header><h1>Order</h1></el-header>
+            <el-header><h1>Pesanan</h1></el-header>
             <el-main>
-              <el-form>
+              <el-form label-position="left" label-width="130px">
                 <el-form-item label="Mode">
-                  <el-radio-group v-model="ruleForm.mode">
+                  <el-radio-group v-model="ruleForm.mode" style="width: 90%">
                     <el-radio-button
                       label="Supplier"
                       name="mode"
@@ -77,7 +77,8 @@
                   <el-select
                     v-model="ruleForm.user"
                     clearable
-                    placeholder="Select"
+                    placeholder="Pilih Pelanggan"
+                    style="width: 90%"
                   >
                     <el-option
                       v-for="item in users"
@@ -92,7 +93,8 @@
                   <el-select
                     v-model="ruleForm.supplier"
                     clearable
-                    placeholder="Select"
+                    placeholder="Pilih Supplier"
+                    style="width: 90%"
                   >
                     <el-option
                       v-for="item in suppliers"
