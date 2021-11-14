@@ -223,7 +223,7 @@ export default {
           )
             .then(async ({ value }) => {
               await this.$axios.$post(
-                `https://tasi-backend.azurewebsites.net/api/manufacture/${row.manufactureId}/process`,
+                `http://localhost:9000/api/manufacture/${row.manufactureId}/process`,
                 { code: codes, message: code[codes], finalProduce: value }
               )
               this.$message({
@@ -235,7 +235,7 @@ export default {
           return
         }
         const proses = await this.$axios.$post(
-          `https://tasi-backend.azurewebsites.net/api/manufacture/${row.manufactureId}/process`,
+          `http://localhost:9000/api/manufacture/${row.manufactureId}/process`,
           { code: codes, message: code[codes] }
         )
         if (proses) {
@@ -255,7 +255,7 @@ export default {
     async handleDelete(index, row) {
       try {
         const hapus = await this.$axios.$post(
-          `https://tasi-backend.azurewebsites.net/api/manufacture/${row.manufactureId}/process`,
+          `http://localhost:9000/api/manufacture/${row.manufactureId}/process`,
           { code: 4, message: code[4] }
         )
         if (hapus.data) {

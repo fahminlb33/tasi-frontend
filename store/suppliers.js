@@ -16,7 +16,7 @@ client.interceptors.request.use(
 
 const crudModule = createCRUDModule({
   resource: 'suppliers',
-  urlRoot: 'https://tasi-backend.azurewebsites.net/api/suppliers',
+  urlRoot: process.env.baseUrl + '/api/suppliers',
   idAttribute: 'supplierId',
   parseList(res) {
     const data = res.data.data.data

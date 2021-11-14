@@ -1,7 +1,14 @@
+const baseUrl = process.env.BASE_URL || 'http://localhost:9000'
+
 export default {
+  env: {
+    baseUrl,
+  },
+
   config: {
     devtools: true,
   },
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'TASI',
@@ -12,6 +19,7 @@ export default {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
+
   ssr: false,
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -61,6 +69,7 @@ export default {
     linkExactActiveClass: 'active',
     middleware: ['auth'],
   },
+
   auth: {
     strategies: {
       local: {
@@ -76,11 +85,11 @@ export default {
         },
         endpoints: {
           login: {
-            url: 'https://tasi-backend.azurewebsites.net/api/users/login',
+            url: baseUrl + '/api/users/login',
             method: 'post',
           },
           user: {
-            url: 'https://tasi-backend.azurewebsites.net/api/users/profile/',
+            url: baseUrl + '/api/users/profile/',
             method: 'get',
           },
           logout: false,

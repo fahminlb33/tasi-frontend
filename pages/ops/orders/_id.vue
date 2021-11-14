@@ -103,7 +103,7 @@ export default {
   async asyncData({ params, $axios }) {
     const slug = params.id // Ketika memanggil /abc maka slug akan menjadi "abc"
     const data = await $axios.$get(
-      `https://tasi-backend.azurewebsites.net/api/orders/${slug}`
+      `http://localhost:9000/api/orders/${slug}`
     )
     const products = {}
     const order = data.data
@@ -112,7 +112,7 @@ export default {
         if (!(el.productId in products)) {
           try {
             const pd = await $axios.$get(
-              `https://tasi-backend.azurewebsites.net/api/products/${el.productId}`
+              `http://localhost:9000/api/products/${el.productId}`
             )
             products[el.productId] = pd.data
           } catch {
