@@ -22,7 +22,7 @@ jobs:
           node-version: '14.x'
 
       - name: npm install, build, and test
-        env: |
+        env:
           BASE_URL: "https://tasi-backend.azurewebsites.net"
         run: |
           npm install
